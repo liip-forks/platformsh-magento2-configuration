@@ -86,7 +86,7 @@ class Platformsh
      */
     public function build()
     {
-        $this->log("Start build.");
+        $this->log(__CLASS__ . " Start build.");
 
         $this->clearTemp();
 
@@ -121,7 +121,7 @@ class Platformsh
      */
     public function deploy()
     {
-        $this->log("Start deploy.");
+        $this->log(__CLASS__ . " Start deploy.");
 
         $this->_init();
 
