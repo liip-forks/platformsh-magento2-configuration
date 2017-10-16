@@ -16,7 +16,7 @@ class Platformsh
 
     protected $debugMode = false;
 
-    protected $platformReadWriteDirs = ['var/di', 'var/generation', 'app/etc'];
+    protected $platformReadWriteDirs = ['var/di', 'generated', 'app/etc'];
 
     protected $urls = ['unsecure' => [], 'secure' => []];
 
@@ -37,11 +37,6 @@ class Platformsh
     protected $redisHost;
     protected $redisScheme;
     protected $redisPort;
-
-    protected $solrHost;
-    protected $solrPath;
-    protected $solrPort;
-    protected $solrScheme;
 
     protected $isMasterBranch = null;
     protected $desiredApplicationMode;
@@ -113,7 +108,7 @@ class Platformsh
 
         $this->log("Compiling generated files.");
 
-        $this->execute("php bin/magento setup:di:compile-multi-tenant");
+        $this->execute("php bin/magento setup:di:compile");
     }
 
     /**
@@ -175,11 +170,6 @@ class Platformsh
         $this->redisHost = $relationships['redis'][0]['host'];
         $this->redisScheme = $relationships['redis'][0]['scheme'];
         $this->redisPort = $relationships['redis'][0]['port'];
-
-        $this->solrHost = $relationships["solr"][0]["host"];
-        $this->solrPath = $relationships["solr"][0]["path"];
-        $this->solrPort = $relationships["solr"][0]["port"];
-        $this->solrScheme = $relationships["solr"][0]["scheme"];
     }
 
     /**
@@ -261,8 +251,6 @@ class Platformsh
 
         $this->updateAdminCredentials();
 
-        $this->updateSolrConfiguration();
-
         $this->updateUrls();
 
         $this->setupUpgrade();
@@ -278,19 +266,6 @@ class Platformsh
         $this->log("Updating admin credentials.");
 
         $this->executeDbQuery("update admin_user set firstname = '$this->adminFirstname', lastname = '$this->adminLastname', email = '$this->adminEmail', username = '$this->adminUsername', password='{$this->generatePassword($this->adminPassword)}' where user_id = '1';");
-    }
-
-    /**
-     * Update SOLR configuration
-     */
-    protected function updateSolrConfiguration()
-    {
-        $this->log("Updating SOLR configuration.");
-
-        $this->executeDbQuery("update core_config_data set value = '$this->solrHost' where path = 'catalog/search/solr_server_hostname' and scope_id = '0';");
-        $this->executeDbQuery("update core_config_data set value = '$this->solrPort' where path = 'catalog/search/solr_server_port' and scope_id = '0';");
-        $this->executeDbQuery("update core_config_data set value = '$this->solrScheme' where path = 'catalog/search/solr_server_username' and scope_id = '0';");
-        $this->executeDbQuery("update core_config_data set value = '$this->solrPath' where path = 'catalog/search/solr_server_path' and scope_id = '0';");
     }
 
     /**
