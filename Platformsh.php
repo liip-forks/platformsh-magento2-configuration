@@ -270,8 +270,8 @@ class Platformsh
 
     protected function deploySampleData()
     {
-        $this->log("Deploying sample data.");
-        $this->execute("bin/magento sampledata:deploy");
+//        $this->log("Deploying sample data.");
+        //$this->execute("bin/magento sampledata:deploy");
     }
 
     /**
