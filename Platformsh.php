@@ -16,7 +16,7 @@ class Platformsh
 
     protected $debugMode = false;
 
-    protected $platformReadWriteDirs = ['generated', 'app/etc'];
+    protected $platformReadWriteDirs = ['generated', 'app/etc', 'var/cache'];
 
     protected $urls = ['unsecure' => [], 'secure' => []];
 
@@ -81,7 +81,7 @@ class Platformsh
      */
     public function build()
     {
-        $this->log(__CLASS__ . " Start build.");
+        $this->log(" Start build.");
 
         $this->clearTemp();
 
@@ -116,7 +116,7 @@ class Platformsh
      */
     public function deploy()
     {
-        $this->log(__CLASS__ . " Start deploy.");
+        $this->log(" Start deploy.");
 
         $this->_init();
 
@@ -128,7 +128,7 @@ class Platformsh
             $this->log(sprintf('Copied directory: %s', $dir));
         }
 
-        if (true) {//!file_exists('app/etc/env.php')
+        if (!file_exists('app/etc/env.php')) {
             $this->installMagento();
         } else {
             $this->updateMagento();
