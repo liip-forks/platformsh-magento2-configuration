@@ -87,6 +87,8 @@ class Platformsh
 
         $this->compile();
 
+        $this->deploySampleData();
+
         $this->log("Copying read/write directories to temp directory.");
 
         foreach ($this->platformReadWriteDirs as $dir) {
@@ -127,8 +129,6 @@ class Platformsh
             $this->execute(sprintf('/bin/bash -c "shopt -s dotglob; cp -R ./init/%s/* %s/ || true"', $dir, $dir));
             $this->log(sprintf('Copied directory: %s', $dir));
         }
-
-        $this->execute("rm -f app/etc/env.php");
 
         if (!file_exists('app/etc/env.php')) {
             $this->installMagento();
@@ -211,7 +211,6 @@ class Platformsh
     {
         $this->log("File env.php does not exist. Installing Magento.");
 
-        $urlUnsecure = $this->urls['unsecure'][''];
         $urlSecure = $this->urls['secure'][''];
 
         $command =
@@ -240,6 +239,7 @@ class Platformsh
         }
 
         $this->execute($command);
+        $this->deployStaticContent();
     }
 
     /**
@@ -257,7 +257,21 @@ class Platformsh
 
         $this->setupUpgrade();
 
+        $this->deployStaticContent();
+
         $this->clearCache();
+    }
+
+    protected function deployStaticContent()
+    {
+        $this->log("Deploying static content.");
+        $this->execute("bin/magento setup:static-content:deploy");
+    }
+
+    protected function deploySampleData()
+    {
+        $this->log("Deploying sample data.");
+        $this->execute("bin/magento sampledata:deploy");
     }
 
     /**
