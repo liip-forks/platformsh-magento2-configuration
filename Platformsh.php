@@ -170,8 +170,6 @@ class Platformsh
         $this->redisHost = $relationships['redis'][0]['host'];
         $this->redisScheme = $relationships['redis'][0]['scheme'];
         $this->redisPort = $relationships['redis'][0]['port'];
-
-        var_dump($this);
     }
 
     /**
