@@ -128,6 +128,8 @@ class Platformsh
             $this->log(sprintf('Copied directory: %s', $dir));
         }
 
+        $this->execute("rm -f app/etc/env.php");
+
         if (!file_exists('app/etc/env.php')) {
             $this->installMagento();
         } else {
