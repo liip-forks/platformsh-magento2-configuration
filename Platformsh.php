@@ -264,8 +264,8 @@ class Platformsh
 
     protected function deployStaticContent()
     {
-        $this->log("Deploying static content.");
-        $this->execute("bin/magento setup:static-content:deploy -f");
+//        $this->log("Deploying static content.");
+//        $this->execute("bin/magento setup:static-content:deploy -f");
     }
 
     protected function deploySampleData()
