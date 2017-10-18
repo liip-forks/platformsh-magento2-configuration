@@ -390,6 +390,8 @@ class Platformsh
 //        }
         $config['backend']['frontName'] = $this->adminUrl;
 
+        $config['install']['date'] = date('r');
+
         $updatedConfig = '<?php'  . "\n" . 'return ' . var_export($config, true) . ';';
 
         file_put_contents($configFileName, $updatedConfig);
