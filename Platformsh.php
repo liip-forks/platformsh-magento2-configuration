@@ -133,7 +133,7 @@ class Platformsh
         } else {
             $this->updateMagento();
         }
-//        $this->processMagentoMode();
+        $this->processMagentoMode();
 //        $this->disableGoogleAnalytics();
     }
 
@@ -367,27 +367,7 @@ class Platformsh
             $config['cache']['frontend']['page_cache']['backend_options']['port'] = $this->redisPort;
             $config['cache']['frontend']['page_cache']['backend_options']['compress_data'] = '0';
         }
-//        if (
-//            isset($config['cache']['frontend']['default']['backend']) &&
-//            isset($config['cache']['frontend']['default']['backend_options']) &&
-//            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['default']['backend']
-//        ) {
-//            $this->log("Updating env.php Redis cache configuration.");
-//
-//            $config['cache']['frontend']['default']['backend_options']['server'] = $this->redisHost;
-//            $config['cache']['frontend']['default']['backend_options']['port'] = $this->redisPort;
-//        }
-//
-//        if (
-//            isset($config['cache']['frontend']['page_cache']['backend']) &&
-//            isset($config['cache']['frontend']['page_cache']['backend_options']) &&
-//            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['page_cache']['backend']
-//        ) {
-//            $this->log("Updating env.php Redis page cache configuration.");
-//
-//            $config['cache']['frontend']['page_cache']['backend_options']['server'] = $this->redisHost;
-//            $config['cache']['frontend']['page_cache']['backend_options']['port'] = $this->redisPort;
-//        }
+
         $config['backend']['frontName'] = $this->adminUrl;
 
         $config['install']['date'] = date('r');
