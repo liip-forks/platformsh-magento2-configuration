@@ -38,6 +38,10 @@ class Platformsh
     protected $redisScheme;
     protected $redisPort;
 
+    protected $memcacheHost;
+    protected $memcacheScheme;
+    protected $memcachePort;
+
     protected $isMasterBranch = null;
     protected $desiredApplicationMode;
 
@@ -170,6 +174,10 @@ class Platformsh
         $this->redisHost = $relationships['redis'][0]['host'];
         $this->redisScheme = $relationships['redis'][0]['scheme'];
         $this->redisPort = $relationships['redis'][0]['port'];
+
+        $this->memcacheHost = $relationships['cache'][0]['host'];
+        $this->memcacheScheme = $relationships['cache'][0]['scheme'];
+        $this->memcachePort = $relationships['cache'][0]['port'];
     }
 
     /**
@@ -354,6 +362,11 @@ class Platformsh
         $config['db']['connection']['indexer']['host'] = $this->dbHost;
         $config['db']['connection']['indexer']['dbname'] = $this->dbName;
         $config['db']['connection']['indexer']['password'] = $this->dbPassword;
+
+        if ($this->memcacheHost && $this->memcachePort) {
+            $config['session']['save'] = 'memcached';
+            $config['session']['save_path'] = $this->memcacheHost . ':' . $this->memcachePort;
+        }
 
         if ($this->redisHost && $this->redisPort) {
             $config['cache']['frontend']['default']['backend'] = 'Cm_Cache_Backend_Redis';
