@@ -13,4 +13,3 @@ You can get it via Composer by adding the following line to your ``composer.json
   "platformsh/magento2-configuration": "dev-master"
 },
 ```
-

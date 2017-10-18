@@ -87,8 +87,6 @@ class Platformsh
 
         $this->compile();
 
-        $this->deploySampleData();
-
         $this->log("Copying read/write directories to temp directory.");
 
         foreach ($this->platformReadWriteDirs as $dir) {
@@ -135,8 +133,8 @@ class Platformsh
         } else {
             $this->updateMagento();
         }
-        $this->processMagentoMode();
-        $this->disableGoogleAnalytics();
+//        $this->processMagentoMode();
+//        $this->disableGoogleAnalytics();
     }
 
     /**
@@ -239,7 +237,6 @@ class Platformsh
         }
 
         $this->execute($command);
-        $this->deployStaticContent();
     }
 
     /**
@@ -257,21 +254,19 @@ class Platformsh
 
         $this->setupUpgrade();
 
-        $this->deployStaticContent();
-
         $this->clearCache();
     }
 
     protected function deployStaticContent()
     {
-//        $this->log("Deploying static content.");
-//        $this->execute("bin/magento setup:static-content:deploy -f");
+        $this->log("Deploying static content.");
+        $this->execute("bin/magento setup:static-content:deploy -f");
     }
 
     protected function deploySampleData()
     {
-//        $this->log("Deploying sample data.");
-        //$this->execute("bin/magento sampledata:deploy");
+        $this->log("Deploying sample data.");
+        $this->execute("bin/magento sampledata:deploy");
     }
 
     /**
