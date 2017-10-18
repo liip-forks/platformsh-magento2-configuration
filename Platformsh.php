@@ -355,27 +355,39 @@ class Platformsh
         $config['db']['connection']['indexer']['dbname'] = $this->dbName;
         $config['db']['connection']['indexer']['password'] = $this->dbPassword;
 
-        if (
-            isset($config['cache']['frontend']['default']['backend']) &&
-            isset($config['cache']['frontend']['default']['backend_options']) &&
-            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['default']['backend']
-        ) {
-            $this->log("Updating env.php Redis cache configuration.");
-
+        if ($this->redisHost && $this->redisPort) {
+            $config['cache']['frontend']['default']['backend'] = 'Cm_Cache_Backend_Redis';
             $config['cache']['frontend']['default']['backend_options']['server'] = $this->redisHost;
+            $config['cache']['frontend']['default']['backend_options']['database'] = '0';
             $config['cache']['frontend']['default']['backend_options']['port'] = $this->redisPort;
-        }
 
-        if (
-            isset($config['cache']['frontend']['page_cache']['backend']) &&
-            isset($config['cache']['frontend']['page_cache']['backend_options']) &&
-            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['page_cache']['backend']
-        ) {
-            $this->log("Updating env.php Redis page cache configuration.");
-
+            $config['cache']['frontend']['page_cache']['backend'] = 'Cm_Cache_Backend_Redis';
             $config['cache']['frontend']['page_cache']['backend_options']['server'] = $this->redisHost;
+            $config['cache']['frontend']['page_cache']['backend_options']['database'] = '1';
             $config['cache']['frontend']['page_cache']['backend_options']['port'] = $this->redisPort;
+            $config['cache']['frontend']['page_cache']['backend_options']['compress_data'] = '0';
         }
+//        if (
+//            isset($config['cache']['frontend']['default']['backend']) &&
+//            isset($config['cache']['frontend']['default']['backend_options']) &&
+//            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['default']['backend']
+//        ) {
+//            $this->log("Updating env.php Redis cache configuration.");
+//
+//            $config['cache']['frontend']['default']['backend_options']['server'] = $this->redisHost;
+//            $config['cache']['frontend']['default']['backend_options']['port'] = $this->redisPort;
+//        }
+//
+//        if (
+//            isset($config['cache']['frontend']['page_cache']['backend']) &&
+//            isset($config['cache']['frontend']['page_cache']['backend_options']) &&
+//            'Cm_Cache_Backend_Redis' == $config['cache']['frontend']['page_cache']['backend']
+//        ) {
+//            $this->log("Updating env.php Redis page cache configuration.");
+//
+//            $config['cache']['frontend']['page_cache']['backend_options']['server'] = $this->redisHost;
+//            $config['cache']['frontend']['page_cache']['backend_options']['port'] = $this->redisPort;
+//        }
         $config['backend']['frontName'] = $this->adminUrl;
 
         $updatedConfig = '<?php'  . "\n" . 'return ' . var_export($config, true) . ';';
